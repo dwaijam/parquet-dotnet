@@ -8,7 +8,7 @@ using Parquet.File.Data;
 
 namespace Parquet.File
 {
-   class ThriftFooter
+   public class ThriftFooter
    {
       private readonly Thrift.FileMetaData _fileMeta;
 

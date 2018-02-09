@@ -7,12 +7,12 @@
 
 namespace Parquet.Thrift
 {
-  /// <summary>
-  /// Encodings supported by Parquet.  Not all encodings are valid for all types.  These
-  /// enums are also used to specify the encoding of definition and repetition levels.
-  /// See the accompanying doc for the details of the more complicated encodings.
-  /// </summary>
-  enum Encoding
+   /// <summary>
+   /// Encodings supported by Parquet.  Not all encodings are valid for all types.  These
+   /// enums are also used to specify the encoding of definition and repetition levels.
+   /// See the accompanying doc for the details of the more complicated encodings.
+   /// </summary>
+   public enum Encoding
   {
     /// <summary>
     /// Default encoding.

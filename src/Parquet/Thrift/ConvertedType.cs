@@ -7,12 +7,12 @@
 
 namespace Parquet.Thrift
 {
-  /// <summary>
-  /// Common types used by frameworks(e.g. hive, pig) using parquet.  This helps map
-  /// between types in those frameworks to the base types in parquet.  This is only
-  /// metadata and not needed to read or write the data.
-  /// </summary>
-  enum ConvertedType
+   /// <summary>
+   /// Common types used by frameworks(e.g. hive, pig) using parquet.  This helps map
+   /// between types in those frameworks to the base types in parquet.  This is only
+   /// metadata and not needed to read or write the data.
+   /// </summary>
+   public enum ConvertedType
   {
     /// <summary>
     /// a BYTE_ARRAY actually contains UTF8 encoded chars
