@@ -7,13 +7,13 @@
 
 namespace Parquet.Thrift
 {
-  /// <summary>
-  /// Types supported by Parquet.  These types are intended to be used in combination
-  /// with the encodings to control the on disk storage format.
-  /// For example INT16 is not included as a type since a good encoding of INT32
-  /// would handle this.
-  /// </summary>
-  enum Type
+   /// <summary>
+   /// Types supported by Parquet.  These types are intended to be used in combination
+   /// with the encodings to control the on disk storage format.
+   /// For example INT16 is not included as a type since a good encoding of INT32
+   /// would handle this.
+   /// </summary>
+   public enum Type
   {
     BOOLEAN = 0,
     INT32 = 1,

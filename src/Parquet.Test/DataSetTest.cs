@@ -57,7 +57,7 @@ namespace Parquet.Test
 
          IReadOnlyCollection<int> column = ds1.GetColumn<int>((DataField)ds1.Schema[0]);
          Assert.Equal(4, column.Count);
-         Assert.Equal(new[] { 1, 2, 3, 4 }, column);
+         Assert.Equal(new List<int>{ 1, 2, 3, 4 }, column);
       }
 
       [Fact]

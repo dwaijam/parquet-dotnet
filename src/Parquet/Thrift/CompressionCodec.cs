@@ -7,10 +7,10 @@
 
 namespace Parquet.Thrift
 {
-  /// <summary>
-  /// Supported compression algorithms.
-  /// </summary>
-  enum CompressionCodec
+   /// <summary>
+   /// Supported compression algorithms.
+   /// </summary>
+   public enum CompressionCodec
   {
     UNCOMPRESSED = 0,
     SNAPPY = 1,

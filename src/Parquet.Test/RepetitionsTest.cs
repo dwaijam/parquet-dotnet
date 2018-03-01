@@ -73,20 +73,20 @@ namespace Parquet.Test
          Assert.Equal(2, s1.Count);
          IList s11 = GetList(r, 0, 0);
          Assert.Equal(10, s11.Count);
-         Assert.Equal(new int[] { 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 }, s11);
+         Assert.Equal(new List<int> { 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 }, s11);
          IList s12 = GetList(r, 0, 1);
          Assert.Equal(7, s12.Count);
-         Assert.Equal(new int[] { 6, 7, 19, 20, 21, 22, 23 }, s12);
+         Assert.Equal(new List<int> { 6, 7, 19, 20, 21, 22, 23 }, s12);
 
          //second struct
          IList s2 = GetList(r, 1);
          Assert.Equal(2, s2.Count);
          IList s21 = GetList(r, 1, 0);
          Assert.Equal(10, s21.Count);
-         Assert.Equal(new int[] { 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 }, s21);
+         Assert.Equal(new List<int> { 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 }, s21);
          IList s22 = GetList(r, 1, 1);
          Assert.Equal(7, s22.Count);
-         Assert.Equal(new int[] { 6, 7, 19, 20, 21, 22, 23 }, s22);
+         Assert.Equal(new List<int> { 6, 7, 19, 20, 21, 22, 23 }, s22);
       }
 
       [Fact]

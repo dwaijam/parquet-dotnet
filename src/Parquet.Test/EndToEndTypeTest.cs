@@ -32,12 +32,12 @@ namespace Parquet.Test
          //loses precision slightly, i.e.
          //Expected: 2017-07-13T10:58:44.3767154+00:00
          //Actual:   2017-07-12T10:58:44.3770000+00:00
-         new object[] {  new DataField<DateTimeOffset>("dateTimeOffset"), new DateTimeOffset(DateTime.UtcNow.RoundToSecond()), "default" },
-         new object[] {  new DateTimeDataField("dateImpala", DateTimeFormat.Impala), new DateTimeOffset(DateTime.UtcNow.RoundToSecond()), "impala" },
+         new object[] {  new DataField<DateTimeOffset>("dateTimeOffset"), new DateTimeOffset(DateTime.UtcNow.RoundToSecond())},
+         new object[] {  new DateTimeDataField("dateImpala", DateTimeFormat.Impala), new DateTimeOffset(DateTime.UtcNow.RoundToSecond())},
 
-         new object[] {  new DateTimeDataField("dateDateAndTime", DateTimeFormat.DateAndTime), new DateTimeOffset(DateTime.UtcNow.RoundToSecond()), "dateandtime" },
+         new object[] {  new DateTimeDataField("dateDateAndTime", DateTimeFormat.DateAndTime), new DateTimeOffset(DateTime.UtcNow.RoundToSecond()) },
          // don't want any excess info in the offset INT32 doesn't contain or care about this data 
-         new object[] {  new DateTimeDataField("dateDate", DateTimeFormat.Date), new DateTimeOffset(DateTime.UtcNow.RoundToDay(), TimeSpan.Zero), "date" },
+         new object[] {  new DateTimeDataField("dateDate", DateTimeFormat.Date), new DateTimeOffset(DateTime.UtcNow.RoundToDay(), TimeSpan.Zero)},
          new object[] {  new DataField<Interval>("interval"), new Interval(3, 2, 1) },
 
          new object[] {  new DataField<byte>("byte"), byte.MinValue },
@@ -59,7 +59,7 @@ namespace Parquet.Test
 
       [Theory]
       [MemberData(nameof(TypeData))]
-      public void Type_writes_and_reads_end_to_end(Field schema, object value, string name = null)
+      public void Type_writes_and_reads_end_to_end(Field schema, object value)
       {
          var ds = new DataSet(schema) { new Row(value) };
          var ms = new MemoryStream();
@@ -75,7 +75,7 @@ namespace Parquet.Test
          //   actualValue = ((DateTimeOffset) actualValue).DateTime;
 
          Assert.True(expectedValue == null && actualValue == null || expectedValue.Equals(actualValue),
-            $"{name}| expected: {expectedValue}, actual: {actualValue}, schema element: {schema}");
+            $"Expected: {expectedValue}, Actual: {actualValue}, schema element: {schema}");
       }
    }
 }

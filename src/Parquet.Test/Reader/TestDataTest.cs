@@ -177,12 +177,5 @@ namespace Parquet.Test.Reader
             typeof(int?),
             typeof(string));
       }
-
-      private string GetDataFilePath(string name)
-      {
-         string thisPath = typeof(TestDataTest).GetTypeInfo().Assembly.Location;
-         return Path.Combine(Path.GetDirectoryName(thisPath), "data", name);
-      }
-
    }
 }

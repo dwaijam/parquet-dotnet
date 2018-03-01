@@ -38,7 +38,7 @@ namespace Parquet.Test
          IList definitions = DefinitionPack.RemoveNulls(list, 1);
 
          Assert.Equal(new int?[] { 1, 2 }, list);
-         Assert.Equal(new int[] { 0, 0, 1, 1 }, definitions);
+         Assert.Equal(new List<int>{ 0, 0, 1, 1 }, definitions);
       }
 
       [Fact]

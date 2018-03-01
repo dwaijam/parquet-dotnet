@@ -222,7 +222,7 @@ root
          Assert.Equal("cities", ds.Schema[0].Name);
          Assert.Equal("id", ds.Schema[1].Name);
 
-         Assert.Equal(ds[0][0], new[] { "London", "Derby", "Paris", "New York" });
+         Assert.Equal(ds[0][0], new List<string>{ "London", "Derby", "Paris", "New York" });
          Assert.Equal(1L, ds[0][1]);
 
          Assert.Equal("{[London;Derby;Paris;New York];1}", ds[0].ToString());

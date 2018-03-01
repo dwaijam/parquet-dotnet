@@ -20,7 +20,7 @@ namespace Parquet.Test
          DataSet ds1 = DataSetGenerator.WriteRead(ds);
 
          Assert.Equal(1, ds1[0][0]);
-         Assert.Equal(new[] { "one", "two" }, ds1[0][1]);
+         Assert.Equal(new List<string> { "one", "two" }, ds1[0][1]);
       }
 
       [Fact]

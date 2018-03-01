@@ -10,8 +10,10 @@ namespace Parquet.Test
    {
       protected string GetDataFilePath(string name)
       {
-         string thisPath = Assembly.Load(new AssemblyName("Parquet.Test")).Location;
-         return Path.Combine(Path.GetDirectoryName(thisPath), "data", name);
+         var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+         string codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
+         string dirPath = Path.GetDirectoryName(codeBasePath);
+         return Path.Combine(dirPath, "data", name);
       }
    }
 }

@@ -7,10 +7,10 @@
 
 namespace Parquet.Thrift
 {
-  /// <summary>
-  /// Representation of Schemas
-  /// </summary>
-  enum FieldRepetitionType
+   /// <summary>
+   /// Representation of Schemas
+   /// </summary>
+   public enum FieldRepetitionType
   {
     /// <summary>
     /// This field is required (can not be null) and each record has exactly 1 value.
