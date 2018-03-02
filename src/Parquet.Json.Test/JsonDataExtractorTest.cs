@@ -39,7 +39,6 @@ namespace Parquet.Json.Test
 
          //validate schema
          Assert.Equal(3, schema.Length);
-
          Assert.Equal(new DataField<int?>("id"), schema[0]);
          Assert.Equal(new DataField<string>("country"), schema[1]);
          Assert.Equal(new StructField("population", new DataField<int?>("year"), new DataField<int?>("amount")), schema[2]);
