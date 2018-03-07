@@ -150,6 +150,26 @@ namespace Parquet.Test
          Assert.Equal(25, nation.RowCount);
       }
 
+      [Fact]
+      public void Reads_file()
+      {
+         ReaderOptions options = new ReaderOptions()
+         {
+            Offset = 350,
+            Count = 50
+         };
+         int count = 0;
+         LazyParquetReader reader = new LazyParquetReader(OpenTestFile("test.parquet"), null);
+         IEnumerator<Row> a = reader.GetEnumerator();
+         while (a.MoveNext())
+         {
+            Console.WriteLine(a.Current);
+            count++;
+         }
+         Assert.Equal(count, Math.Min(reader.TotalRowCount, options.Count));
+         Assert.Equal(5, reader.Schema.Length);
+      }
+
       //this only tests that the file is readable as it used to completely crash before
       [Fact]
       public void Reads_compat_customer_impala_file()
