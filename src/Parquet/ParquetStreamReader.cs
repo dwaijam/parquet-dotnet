@@ -13,7 +13,7 @@ namespace Parquet
    /// <summary>
    /// Implements a lazy Apache Parquet format reader. 
    /// </summary>
-   public class LazyParquetReader : ParquetActor, IDisposable
+   public class ParquetStreamReader : ParquetActor, IDisposable
    {
       private readonly Stream _input;
       private readonly Schema _schema;
@@ -39,7 +39,7 @@ namespace Parquet
       /// <exception cref="ArgumentNullException">input</exception>
       /// <exception cref="ArgumentException">stream must be readable and seekable - input</exception>
       /// <exception cref="IOException">not a Parquet file (size too small)</exception>
-      public LazyParquetReader(Stream input, ParquetOptions formatOptions = null) : base(input)
+      public ParquetStreamReader(Stream input, ParquetOptions formatOptions = null) : base(input)
       {
          _input = input ?? throw new ArgumentNullException(nameof(input));
          if (!input.CanRead || !input.CanSeek) throw new ArgumentException("stream must be readable and seekable", nameof(input));
@@ -58,7 +58,7 @@ namespace Parquet
       /// </summary>
       /// <param name="fullPath">The full path.</param>
       /// <param name="formatOptions">Optional reader options.</param>
-      public LazyParquetReader(string fullPath, ParquetOptions formatOptions = null) 
+      public ParquetStreamReader(string fullPath, ParquetOptions formatOptions = null) 
          : this(System.IO.File.OpenRead(fullPath), formatOptions)
       {
       }
@@ -85,13 +85,10 @@ namespace Parquet
                pos += rg.Num_rows;
                continue;
             }
-
             long offset = Math.Max(0, readerOptions.Offset - pos);
             long count = readerOptions.Count == -1 ? rg.Num_rows : Math.Min(readerOptions.Count - rowsRead, rg.Num_rows - offset);
-
             for (long i = offset; i < offset + count; i++)
             {
-
                IList allvalues = new List<object>();
                for (int icol = 0; icol < rg.Columns.Count; icol++)
                {
