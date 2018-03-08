@@ -108,7 +108,7 @@ namespace Parquet
                   }
                }
                rowsRead++;
-               yield return new Row(allvalues);
+               yield return new Row(allvalues.Cast<object>().ToArray());
             }
             pos += rg.Num_rows;
          }
