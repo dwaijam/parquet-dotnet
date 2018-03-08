@@ -64,18 +64,17 @@ namespace Parquet
       }
 
       /// <summary>
-      /// Gets an enumerator of the <see cref="Row"/> objects from the parquet file 
-      /// as specified by readerOptions object
+      /// Test read, to be defined
       /// </summary>
-      /// <param name="readerOptions"></param>
-      /// <returns>An enumerator of <see cref="Row"/> objects</returns>
-      public IEnumerator<Row> GetEnumerator(ReaderOptions readerOptions = null)
+      public DataSet Read(ReaderOptions readerOptions = null)
       {
          readerOptions = readerOptions ?? new ReaderOptions();
          readerOptions.Validate();
          FieldPredicate[] fieldPredicates = PredicateFactory.CreateFieldPredicates(readerOptions);
+         var pathToValues = new Dictionary<string, IList>();
          long pos = 0;
          long rowsRead = 0;
+
          foreach (RowGroup rg in _meta.Row_groups)
          {
             //check whether to skip RG completely
@@ -85,34 +84,54 @@ namespace Parquet
                pos += rg.Num_rows;
                continue;
             }
+
             long offset = Math.Max(0, readerOptions.Offset - pos);
-            long count = readerOptions.Count == -1 ? rg.Num_rows : Math.Min(readerOptions.Count - rowsRead, rg.Num_rows - offset);
-            for (long i = offset; i < offset + count; i++)
+            long count = readerOptions.Count == -1 ? rg.Num_rows : Math.Min(readerOptions.Count - rowsRead, rg.Num_rows);
+
+            for (int icol = 0; icol < rg.Columns.Count; icol++)
             {
-               IList allvalues = new List<object>();
-               for (int icol = 0; icol < rg.Columns.Count; icol++)
+               Thrift.ColumnChunk cc = rg.Columns[icol];
+               string path = cc.GetPath();
+               if (fieldPredicates != null && !fieldPredicates.Any(p => p.IsMatch(cc, path))) continue;
+
+               var columnarReader = new ColumnarReader(_input, cc, _footer, _formatOptions);
+
+               try
                {
-                  ColumnChunk cc = rg.Columns[icol];
-                  string path = cc.GetPath();
-                  if (fieldPredicates != null && !fieldPredicates.Any(p => p.IsMatch(cc, path))) continue;
+                  IList chunkValues = columnarReader.Read(offset, count);
 
-                  var columnarReader = new ColumnarReader(_input, cc, _footer, _formatOptions);
-
-                  try
+                  if (!pathToValues.TryGetValue(path, out IList allValues))
                   {
-                     allvalues.Add(columnarReader.Read(i, 1)[0]);
+                     pathToValues[path] = chunkValues;
                   }
-                  catch (Exception ex)
+                  else
                   {
-                     throw new ParquetException($"fatal error reading column '{path}'", ex);
+                     foreach (object v in chunkValues)
+                     {
+                        allValues.Add(v);
+                     }
+                  }
+
+                  if (icol == 0)
+                  {
+                     //todo: this may not work
+                     rowsRead += chunkValues.Count;
                   }
                }
-               rowsRead++;
-               yield return new Row(allvalues.Cast<object>().ToArray());
+               catch (Exception ex)
+               {
+                  throw new ParquetException($"fatal error reading column '{path}'", ex);
+               }
             }
+
             pos += rg.Num_rows;
          }
-
+     
+         var ds = new DataSet(_schema, pathToValues, _meta.Num_rows, _meta.Created_by);
+         Dictionary<string, string> customMetadata = _footer.CustomMetadata;
+         if (customMetadata != null) ds.Metadata.Custom.AddRange(customMetadata);
+         ds.Thrift = _meta;
+         return ds;
       }
 
       /// <summary>

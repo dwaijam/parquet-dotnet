@@ -355,17 +355,11 @@ root
             Offset = 350,
             Count = 50
          };
-         int count = 0;
          var reader = new ParquetStreamReader(OpenTestFile("test.parquet"));
          Assert.Equal(5, reader.Schema.Length);
 
-         IEnumerator<Row> a = reader.GetEnumerator(options);
-         while (a.MoveNext())
-         {
-            Console.WriteLine(a.Current);
-            count++;
-         }
-         Assert.Equal(count, Math.Min(reader.TotalRowCount, options.Count));
+         DataSet a = reader.Read(options);
+         Assert.Equal(Math.Min(reader.TotalRowCount - options.Offset, options.Count), a.RowCount);
       }
 
       class ReadableNonSeekableStream : DelegatedStream
