@@ -127,7 +127,7 @@ namespace Parquet
             pos += rg.Num_rows;
          }
      
-         var ds = new DataSet(_schema, pathToValues, _meta.Num_rows, _meta.Created_by);
+         var ds = new DataSet(_schema.Filter(fieldPredicates), pathToValues, _meta.Num_rows, _meta.Created_by);
          Dictionary<string, string> customMetadata = _footer.CustomMetadata;
          if (customMetadata != null) ds.Metadata.Custom.AddRange(customMetadata);
          ds.Thrift = _meta;
