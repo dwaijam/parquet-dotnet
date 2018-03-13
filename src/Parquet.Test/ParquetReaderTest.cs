@@ -347,6 +347,21 @@ root
          Assert.Equal(2, ds.FieldCount);
       }
 
+      [Fact]
+      public void Read_ParquetStreamReader()
+      {
+         var options = new ReaderOptions()
+         {
+            Offset = 350,
+            Count = 50
+         };
+         var reader = new ParquetStreamReader(OpenTestFile("test.parquet"));
+         Assert.Equal(5, reader.FileSchema.Length);
+
+         DataSet a = reader.Read(options);
+         Assert.Equal(Math.Min(reader.TotalRowCount - options.Offset, options.Count), a.RowCount);
+      }
+
       class ReadableNonSeekableStream : DelegatedStream
       {
          public ReadableNonSeekableStream(Stream master) : base(master)
