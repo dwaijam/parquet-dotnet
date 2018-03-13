@@ -356,7 +356,7 @@ root
             Count = 50
          };
          var reader = new ParquetStreamReader(OpenTestFile("test.parquet"));
-         Assert.Equal(5, reader.Schema.Length);
+         Assert.Equal(5, reader.FileSchema.Length);
 
          DataSet a = reader.Read(options);
          Assert.Equal(Math.Min(reader.TotalRowCount - options.Offset, options.Count), a.RowCount);

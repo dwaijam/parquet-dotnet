@@ -16,15 +16,15 @@ namespace Parquet
    public class ParquetStreamReader : ParquetActor, IDisposable
    {
       private readonly Stream _input;
-      private readonly Schema _schema;
+      private readonly Schema _fileSchema;
       private readonly FileMetaData _meta;
       private readonly ThriftFooter _footer;
       private readonly ParquetOptions _formatOptions;
 
       /// <summary>
-      /// Gets dataset schema
+      /// Gets file schema
       /// </summary>
-      public Schema Schema => _schema;
+      public Schema FileSchema => _fileSchema;
 
       /// <summary>
       /// Gets the total row count in the source file
@@ -49,7 +49,7 @@ namespace Parquet
          _formatOptions = formatOptions ?? new ParquetOptions();
          _meta = ReadMetadata();
          _footer = new ThriftFooter(_meta);
-         _schema = _footer.CreateModelSchema(_formatOptions);
+         _fileSchema = _footer.CreateModelSchema(_formatOptions);
          TotalRowCount = _meta.Num_rows;
       }
 
@@ -127,7 +127,7 @@ namespace Parquet
             pos += rg.Num_rows;
          }
      
-         var ds = new DataSet(_schema.Filter(fieldPredicates), pathToValues, _meta.Num_rows, _meta.Created_by);
+         var ds = new DataSet(_fileSchema.Filter(fieldPredicates), pathToValues, _meta.Num_rows, _meta.Created_by);
          Dictionary<string, string> customMetadata = _footer.CustomMetadata;
          if (customMetadata != null) ds.Metadata.Custom.AddRange(customMetadata);
          ds.Thrift = _meta;
