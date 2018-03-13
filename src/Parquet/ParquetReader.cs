@@ -101,8 +101,8 @@ namespace Parquet
 
             long offset = Math.Max(0, _readerOptions.Offset - pos);
             long count = _readerOptions.Count == -1 ? rg.Num_rows : Math.Min(_readerOptions.Count - rowsRead, rg.Num_rows);
-
-            for(int icol = 0; icol < rg.Columns.Count; icol++)
+            bool rowsReadUpdated = false;
+            for (int icol = 0; icol < rg.Columns.Count; icol++)
             {
                Thrift.ColumnChunk cc = rg.Columns[icol];
                string path = cc.GetPath();
@@ -126,10 +126,10 @@ namespace Parquet
                      }
                   }
 
-                  if(icol == 0)
+                  if(!rowsReadUpdated)
                   {
-                     //todo: this may not work
                      rowsRead += chunkValues.Count;
+                     rowsReadUpdated = true;
                   }
                }
                catch(Exception ex)

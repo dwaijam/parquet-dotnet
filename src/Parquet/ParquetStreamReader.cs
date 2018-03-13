@@ -87,7 +87,7 @@ namespace Parquet
 
             long offset = Math.Max(0, readerOptions.Offset - pos);
             long count = readerOptions.Count == -1 ? rg.Num_rows : Math.Min(readerOptions.Count - rowsRead, rg.Num_rows);
-
+            bool rowsReadUpdated = false;
             for (int icol = 0; icol < rg.Columns.Count; icol++)
             {
                Thrift.ColumnChunk cc = rg.Columns[icol];
@@ -112,10 +112,10 @@ namespace Parquet
                      }
                   }
 
-                  if (icol == 0)
+                  if (!rowsReadUpdated)
                   {
-                     //todo: this may not work
                      rowsRead += chunkValues.Count;
+                     rowsReadUpdated = true;
                   }
                }
                catch (Exception ex)
